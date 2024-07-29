@@ -1,67 +1,25 @@
 <?php
-use App\Models\Post;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Validation\ValidationException;
 
 // Index
-Route::view('/', 'home');
+Route::view('/', 'home')->middleware('auth');
 
-// Index
-Route::get('/posts', function() {
-    $posts = Post::with('user', 'comments')->get();
-    return view('post.index', ['posts' => $posts]);
-});
+// Post
+Route::get('/posts', [PostController::class, 'index'])->middleware('auth');
+Route::get('/post/{id}', [PostController::class, 'show', 'id'])->middleware('auth');;
 
-// Show
-Route::get('/post/{id}', function($id) {
-    $post = Post::with('user', 'comments')->find($id);
-    return view('post.show', ['post' => $post]);
-});
+//Auth
+Route::get('/register', [RegistrationController::class, 'create'])->middleware('guest');
+Route::post('/register', [RegistrationController::class, 'store'])->middleware('guest');
 
-// Index
-Route::view('/register', 'auth.register');
-// Store
-Route::post('/register', function(){
-//     Validate
-    $attributes = request()->validate([
-        'username' => ['required', 'min:3'],
-        'email' => ['required', 'email', 'unique:users'],
-        'password' => ['required', 'min:8', 'confirmed'],
-    ]);
-    // Store
-    $user = User::create($attributes);
-    // Authorize
-    Auth::login($user);
-    // Redirect
-    return redirect('/');
-});
+// Session
+Route::get('/login', [SessionController::class, 'create'])->middleware('guest')->name('login');
+Route::post('/login', [SessionController::class, 'store'])->middleware('guest');
+Route::post('/logout', [SessionController::class, 'destroy'])->middleware('auth');
 
-Route::post('/login', function(){
-    // Validate
-    $attributes = request()->validate([
-        'email' => ['required'],
-        'password' => ['required'],
-    ]);
-    // Attempt to login
-    if(! Auth::attempt($attributes)){
-        throw ValidationException::withMessages([
-            'email' => 'Sorry, those credentials do not match our records.',
-        ]);
-    };
-    // regenerate the session token
-    request()->session()->regenerate();
-    // redirect
-    return redirect('/');
-});
-
-Route::post('/logout', function(){
-    Auth::logout();
-    return redirect('/login');
-});
-
-// Index
-Route::view('/login', 'auth.login');
 
 
