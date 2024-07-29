@@ -9,4 +9,9 @@ Route::get('/posts', function() {
     return view('posts', ['posts' => $posts]);
 });
 
+Route::get('/post/{id}', function($id) {
+    $post = Post::with('user', 'comments')->find($id);
+    return view('post', ['post' => $post]);
+});
+
 

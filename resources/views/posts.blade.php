@@ -10,5 +10,4 @@
             </section>
         @endforeach
     </div>
-
 </x-layout>
