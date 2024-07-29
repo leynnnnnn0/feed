@@ -6,13 +6,17 @@
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form class="space-y-6" action="#" method="POST">
+            <form class="space-y-6" action="/register" method="POST">
+                @csrf
                 <div>
                     <x-form-label for="username ">Username</x-form-label>
                     <x-form-input
                         id="username"
                         name="username"
-                        type="text"/>
+                        type="text"
+                        :value="old('username')"
+                    />
+                    <x-form-error name="username"/>
                 </div>
                 <div>
                     <x-form-label for="email ">Email</x-form-label>
@@ -20,7 +24,10 @@
                         id="email"
                         name="email"
                         type="email"
-                        autocomplete="email"/>
+                        autocomplete="email"
+                        :value="old('email')"
+                    />
+                    <x-form-error name="email"/>
                 </div>
                 <div>
                     <x-form-label for="password ">Password</x-form-label>
@@ -28,6 +35,7 @@
                         id="password"
                         name="password"
                         type="password"/>
+                    <x-form-error name="password"/>
                 </div>
                 <div>
                     <x-form-label for="password_confirmation ">Confirm Password</x-form-label>
