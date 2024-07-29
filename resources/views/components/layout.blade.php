@@ -15,5 +15,4 @@
         </div>
     </main>
 </div>
-</body>
-</html>
+<x-footer/>
