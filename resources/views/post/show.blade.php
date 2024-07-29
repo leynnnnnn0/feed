@@ -13,6 +13,16 @@
                     <p class="whitespace-wrap font-medium text-black text-sm">{{ $comment->body }}</p>
                 </div>
             @endforeach
+            <form action="/comment" class="flex flex-col gap-2">
+                <div class="inline">
+                    <label for="body" class="text-xs font-bold text-gray-500">Add Comment</label>
+                    <input type="text" id="body" name="body" class="w-full rounded-lg border border-gray-300">
+                </div>
+                <div class="flex justify-end items-center">
+                    <button class="hover:bg-opacity-75 bg-blue-500 text-white text-xs font-medium text-md px-4 py-1 rounded-lg">Add</button>
+                </div>
+            </form>
         </section>
     </div>
+    <a href="/posts" class="mt-5 underline font-medium text-xs">Back to posts</a>
 </x-layout>
